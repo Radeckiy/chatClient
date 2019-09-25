@@ -1,7 +1,7 @@
-## Chat Server
+## Chat Client
 Version: 1.1
 ## Описание
-Консольный клиент для чата c использованием Spring WebSocket + Web + Thymeleaf + MongoDB. Приложение выполняет роль сервера для чата. В проект встроен web клиент на Thymeleaf.
+Консольный клиент для чата c использованием Spring WebSocket + Web + Thymeleaf + MongoDB. Приложение выполняет роль сервера для чата. В проект встроен web клиент на Thymeleaf.[Серверная часть](https://github.com/Radeckiy/chatServer "ссылка на гит")
 ## О проекте
 Язык программирования: **Java**
 
@@ -9,9 +9,7 @@ Version: 1.1
 
 Используемые технологии: 
 - **Spring Boot**
-- **Spring Web**
-- **Spring Thymeleaf**
-- **Spring MongoDB**
+- **Spring WebSocket**
 
 Настройки находятся по пути: `src/main/resources/application.properties`. Там можно установить хост, порт и никнейм.
 
