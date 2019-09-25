@@ -30,4 +30,9 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     public void handleFrame(StompHeaders headers, Object payload) {
         System.err.println("Message: " + payload.toString());
     }
+
+    @Override
+    public void handleTransportError(StompSession session, Throwable exception) {
+        System.err.println("\nНе удалось подключиться к websocket'у! Сервер отключен или у вас нет доступа к этому чату!\n");
+    }
 }
