@@ -4,8 +4,7 @@ import com.radeckiy.chatclient.models.Message;
 import com.radeckiy.chatclient.models.MessageType;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -41,22 +40,16 @@ public class Application {
             System.err.println("ОШИБКА: Файл свойств отсуствует!");
         }
 
-        WebSocketClient simpleWebSocketClient = new StandardWebSocketClient();
         List<Transport> transports = new ArrayList<>(1);
-        transports.add(new
+        transports.add(new WebSocketTransport(new StandardWebSocketClient()));
 
-                WebSocketTransport(simpleWebSocketClient));
+        WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(transports));
+        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        SockJsClient sockJsClient = new SockJsClient(transports);
-        WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
-        stompClient.setMessageConverter(new
+        WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
+        webSocketHttpHeaders.add("username", username);
+        StompSession session = stompClient.connect( "http://" + host + ":" + port + "/ws" ,webSocketHttpHeaders, new MyStompSessionHandler(username)).get();
 
-                MappingJackson2MessageConverter());
-
-        String url = "http://" + host + ":" + port + "/ws";
-
-        StompSessionHandler sessionHandler = new MyStompSessionHandler(username);
-        StompSession session = stompClient.connect(url, sessionHandler).get();
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
